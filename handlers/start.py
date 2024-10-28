@@ -4,7 +4,7 @@ from keyboards.main_menu import main_menu_keyboard
 
 router = Router()
 
-@router.message(Command(commands=['start']))
+@router.message(Command("start"))
 async def send_welcome(message: types.Message):
     await message.answer(
         "Привет! Я MindMate, чат-бот для поддержки твоего психического здоровья.\n\n"

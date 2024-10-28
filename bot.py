@@ -14,7 +14,6 @@ dp = Dispatcher()
 # Регистрация обработчиков
 register_handlers(dp)
 
-# Асинхронная функция для запуска бота
 async def main():
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

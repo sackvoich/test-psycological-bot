@@ -5,6 +5,6 @@ from keyboards.inline_menu import inline_menu
 
 router = Router()
 
-@router.message(Command(commands=['resources']))
+@router.message(Command("resources"))
 async def send_resources(message: types.Message):
     await message.answer(RESOURCES_TEXT, disable_web_page_preview=True, reply_markup=inline_menu)

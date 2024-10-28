@@ -1,8 +1,6 @@
-from aiogram import Router, types
+from aiogram import Router, types, F
 from aiogram.filters import Command
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from keyboards.inline_menu import inline_menu
-
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 router = Router()
 
@@ -14,16 +12,14 @@ buttons = [
 ]
 mood_keyboard = ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
 
-# Обработчик команды /mood для запроса настроения
-@router.message(Command(commands=['mood']))
+@router.message(Command("mood"))
 async def ask_mood(message: types.Message):
     await message.answer("Как ты себя чувствуешь сегодня?", reply_markup=mood_keyboard)
 
-# Обработчик для ответа пользователя о настроении
-@router.message()
+@router.message(F.text.in_({"😊 Хорошее", "😐 Нейтральное", "😔 Плохое"}))
 async def receive_mood(message: types.Message):
-    # Проверяем, содержится ли текст в заранее определённых вариантах
-    if message.text in ["😊 Хорошее", "😐 Нейтральное", "😔 Плохое"]:
-        mood = message.text
-        # Сохраните настроение в базе данных, если это нужно
-        await message.answer(f"Спасибо, что поделился(лась) своим настроением: {mood}", reply_markup=types.ReplyKeyboardRemove())
+    mood = message.text
+    await message.answer(
+        f"Спасибо, что поделился(лась) своим настроением: {mood}",
+        reply_markup=ReplyKeyboardRemove()
+    )

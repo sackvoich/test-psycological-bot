@@ -4,7 +4,7 @@ from keyboards.inline_menu import inline_menu
 
 router = Router()
 
-@router.message(Command(commands=['help']))
+@router.message(Command("help"))
 async def send_help(message: types.Message):
     help_text = (
         "Вот как я могу помочь:\n\n"
