@@ -1,6 +1,7 @@
 from aiogram import Router, types, F
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+from database import save_user_info
 
 router = Router()
 
@@ -19,6 +20,10 @@ async def ask_mood(message: types.Message):
 @router.message(F.text.in_({"😊 Хорошее", "😐 Нейтральное", "😔 Плохое"}))
 async def receive_mood(message: types.Message):
     mood = message.text
+    user_id = message.from_user.id
+    # Сохраняем настроение пользователя
+    save_user_info(user_id=user_id, mood=mood)
+    
     await message.answer(
         f"Спасибо, что поделился(лась) своим настроением: {mood}",
         reply_markup=ReplyKeyboardRemove()

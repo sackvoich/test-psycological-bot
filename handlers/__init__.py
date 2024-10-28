@@ -5,6 +5,7 @@ from .tips import router as tips_router
 from .contact import router as contact_router
 from .mood import router as mood_router
 from .callback_handler import router as callback_router
+from .chat import router as chat_router  # Новый импорт
 
 def register_handlers(dp):
     dp.include_router(start_router)
@@ -14,3 +15,4 @@ def register_handlers(dp):
     dp.include_router(contact_router)
     dp.include_router(mood_router)
     dp.include_router(callback_router)
+    dp.include_router(chat_router)  # Регистрация нового обработчика
