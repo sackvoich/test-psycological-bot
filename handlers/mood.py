@@ -25,6 +25,10 @@ async def receive_mood(message: types.Message):
     # Сохраняем настроение пользователя
     save_user_info(user_id=user_id, mood=mood)
     
+    user_id = message.from_user.id
+    # Сохраняем настроение пользователя
+    save_user_info(user_id=user_id, mood=mood)
+    
     await message.answer(
         f"Спасибо, что поделился(лась) своим настроением: {mood}",
         reply_markup=ReplyKeyboardRemove()
