@@ -7,4 +7,4 @@ router = Router()
 
 @router.message(Command("tips"))
 async def send_tips(message: types.Message):
-    await message.answer(TIPS_TEXT, reply_markup=inline_menu)
+    await message.answer(TIPS_TEXT)

@@ -7,4 +7,4 @@ router = Router()
 
 @router.message(Command("contact"))
 async def send_contact(message: types.Message):
-    await message.answer(CONTACT_TEXT, disable_web_page_preview=True, reply_markup=inline_menu)
+    await message.answer(CONTACT_TEXT, disable_web_page_preview=True)

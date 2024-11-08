@@ -1,6 +1,17 @@
 import google.generativeai as genai
 import re
 from gemini_api import API_KEY
+import os
+import requests
+# Настройка прокси
+#proxies = {
+#    'http': 'http://88.99.67.172:3128',
+#    'https': 'http://88.99.67.172:3128',
+#}
+
+# Установка переменных окружения для прокси
+#os.environ['HTTP_PROXY'] = proxies['http']
+#os.environ['HTTPS_PROXY'] = proxies['https']
 
 # Устанавливаем API ключ для взаимодействия с Google Generative AI
 genai.configure(api_key=API_KEY)
@@ -9,7 +20,7 @@ genai.configure(api_key=API_KEY)
 generation_config = {
     "temperature": 0.8,           # Контроль креативности ответа
     "top_p": 0.9,                 # Ограничение на выбор токенов для большей вариативности
-    "max_output_tokens": 400,     # Количество токенов для ответа
+    "max_output_tokens": 500,     # Количество токенов для ответа
     "response_mime_type": "text/plain"
 }
 
@@ -24,6 +35,23 @@ chat_session = model.start_chat(
     history=[]
 )
 
+# Начальный промпт для модели
+initial_prompt = """Ты - дружелюбный и эмпатичный психолог. Твоя задача - поддерживать пользователя, задавать уточняющие вопросы и помогать ему найти конструктивные решения. 
+
+1. Всегда отвечай на русском языке.
+2. Используй ясные и поддерживающие ответы.
+3. Старайся избегать токсичных советов.
+4. Если не можешь помочь, честно об этом скажи.
+
+Начинай диалог!"""
+
+chat_session.send_message(initial_prompt)
+
+def format_response(text):
+    """Форматирование ответа для корректного отображения в Telegram"""
+    # Убираем любое форматирование
+    return text
+
 # Функция для генерации ответа через Google Generative AI
 def get_gemini_response(user_input):
     try:
@@ -36,8 +64,11 @@ def get_gemini_response(user_input):
         # Фильтрация неадекватных ответов
         if is_inappropriate_or_repetitive(generated_text):
             return get_generic_response(), None
+        
+        # Форматируем текст (в данном случае убираем форматирование)
+        formatted_text = format_response(generated_text)
 
-        return generated_text, None
+        return formatted_text, None
 
     except Exception as e:
         return f"Произошла ошибка при подключении к API: {str(e)}", None
@@ -59,8 +90,8 @@ def is_inappropriate_or_repetitive(text):
 # Функция для возврата поддерживающего шаблонного ответа
 def get_generic_response():
     responses = [
-        "Понимаю, как тебе сейчас сложно. Я здесь, чтобы поддержать тебя, давай попробуем вместе найти лучшее решение.",
-        "Мне жаль, что ты чувствуешь себя так. Помни, что ты не один, и я готов помочь тебе найти выход.",
-        "Это действительно тяжёлая ситуация, но важно помнить, что всё может измениться. Давай обсудим, что ты можешь сделать, чтобы почувствовать себя лучше."
+        "Понимаю, что это может быть непросто. Я здесь, чтобы поддержать тебя.",
+        "Мне жаль слышать, что ты так себя чувствуешь. Давай обсудим, как я могу помочь.",
+        "Каждый сталкивается с трудностями, и это нормально. Важно знать, что ты не один."
     ]
     return responses[0]

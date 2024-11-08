@@ -2,6 +2,7 @@ from aiogram import Router, types, F
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from database import save_user_info
+from handlers.menu import main_menu_keyboard  # Импортируем основное меню
 
 router = Router()
 
@@ -28,3 +29,6 @@ async def receive_mood(message: types.Message):
         f"Спасибо, что поделился(лась) своим настроением: {mood}",
         reply_markup=ReplyKeyboardRemove()
     )
+    
+    # Возвращаем основное меню
+    await message.answer("Выберите пункт меню:", reply_markup=main_menu_keyboard)

@@ -1,6 +1,6 @@
 from aiogram import Router, types
 from aiogram.filters import Command
-from keyboards.main_menu import main_menu_keyboard
+from handlers.menu import main_menu_keyboard  # Обновите импорт
 from database import create_table, save_user_info
 
 router = Router()
@@ -18,5 +18,5 @@ async def send_welcome(message: types.Message):
     await message.answer(
         f"Привет, {user_name}! Я MindMate, чат-бот для поддержки твоего психического здоровья.\n\n"
         "Вот что я умею делать. Выбери команду ниже или напиши /help, чтобы узнать больше.",
-        reply_markup=main_menu_keyboard  # Главное меню с командами
+        reply_markup=main_menu_keyboard  # Отправляем клавиатуру
     )
