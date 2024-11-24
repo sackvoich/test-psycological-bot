@@ -1,12 +1,13 @@
 from aiogram import Router, types
 from aiogram.filters import Command
 from handlers.menu import main_menu_keyboard  # Обновите импорт
-from database import create_table, save_user_info
+from database import create_table, save_user_info, create_mood_history_table
 
 router = Router()
 
 # Создание таблицы при старте
 create_table()
+create_mood_history_table()
 
 @router.message(Command("start"))
 async def send_welcome(message: types.Message):

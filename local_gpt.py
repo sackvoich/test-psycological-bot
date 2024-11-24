@@ -1,17 +1,7 @@
 import google.generativeai as genai
 import re
 from gemini_api import API_KEY
-import os
-import requests
-# Настройка прокси
-#proxies = {
-#    'http': 'http://88.99.67.172:3128',
-#    'https': 'http://88.99.67.172:3128',
-#}
-
-# Установка переменных окружения для прокси
-#os.environ['HTTP_PROXY'] = proxies['http']
-#os.environ['HTTPS_PROXY'] = proxies['https']
+import logging
 
 # Устанавливаем API ключ для взаимодействия с Google Generative AI
 genai.configure(api_key=API_KEY)
@@ -26,7 +16,7 @@ generation_config = {
 
 # Создание модели и настройка генерации
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
+    model_name="gemini-1.5-flash-8b",
     generation_config=generation_config
 )
 
@@ -55,11 +45,15 @@ def format_response(text):
 # Функция для генерации ответа через Google Generative AI
 def get_gemini_response(user_input):
     try:
+        logging.info(f"User input: {user_input}") 
+        
         # Добавление нового сообщения от пользователя в историю чата
         response = chat_session.send_message(user_input)
 
         # Получаем текст из сгенерированного ответа
         generated_text = response.text.strip()
+        
+        logging.info(f"API response: {generated_text}") # Логируем ответ API
 
         # Фильтрация неадекватных ответов
         if is_inappropriate_or_repetitive(generated_text):
@@ -71,6 +65,7 @@ def get_gemini_response(user_input):
         return formatted_text, None
 
     except Exception as e:
+        logging.error(f"Error in get_gemini_response: {e}") # Логируем ошибки
         return f"Произошла ошибка при подключении к API: {str(e)}", None
 
 # Функция для проверки на неадекватные или повторяющиеся ответы

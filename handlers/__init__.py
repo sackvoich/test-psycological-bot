@@ -17,7 +17,8 @@ def register_handlers(dp):
     dp.include_router(resources_router)
     dp.include_router(tips_router)
     dp.include_router(contact_router)
-    dp.include_router(mood_router)
+    dp.include_router(mood_router)  # mood_router должен быть зарегистрирован раньше
     dp.include_router(callback_router)
-    dp.include_router(menu_router)  # Зарегистрируем меню раньше, чтобы имелся приоритет
-    dp.include_router(chat_router)  # Регистрируем чат позже
+    dp.include_router(menu_router)
+    dp.include_router(chat_router)
+
